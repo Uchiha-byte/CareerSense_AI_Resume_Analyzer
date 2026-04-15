@@ -49,5 +49,3 @@ CareerSense is an elite, immersive professional analysis platform. It leverages 
 
 Detailed technical specifications for the CareerSense API can be found in the [API Endpoints Guide](api_endpoints.md).
 
-## 📄 License
-Demonstration purposes only. Built for elite career acceleration.
