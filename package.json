@@ -8,7 +8,8 @@
     "dev:backend": "tsx watch src/server.ts",
     "dev:frontend": "vite",
     "test": "vitest --run",
-    "build": "vite build"
+    "build": "node node_modules/vite/bin/vite.js build",
+    "start": "tsx src/server.ts"
   },
   "dependencies": {
     "@tsparticles/engine": "^3.9.1",

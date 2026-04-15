@@ -51,12 +51,24 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Serve index.html and any static files (style.css etc.) from project root
-app.use(express.static(ROOT_DIR));
+// Provide static files from frontend build
+const FRONTEND_DIST = path.join(ROOT_DIR, 'dist', 'frontend');
+app.use(express.static(FRONTEND_DIST));
+app.use(express.static(ROOT_DIR)); // Fallback for any root files
 
 // Fallback — serve index.html for any non-API route
 app.get('*', (_req: Request, res: Response) => {
-  res.sendFile(path.join(ROOT_DIR, 'index.html'));
+  const indexPath = path.join(FRONTEND_DIST, 'index.html');
+  if (path.extname(_req.path)) {
+    res.status(404).end();
+    return;
+  }
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      // Fallback to project root if dist is not found (dev mode)
+      res.sendFile(path.join(ROOT_DIR, 'index.html'));
+    }
+  });
 });
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
