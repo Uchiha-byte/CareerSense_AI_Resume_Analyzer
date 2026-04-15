@@ -3,7 +3,7 @@
 This document outlines the endpoints for the CareerSense backend, including request structures, response formats, and the internal AI routing logic.
 
 ## 🟢 Base URL
-`http://localhost:3001`
+`http://localhost:xxxx`
 
 ---
 
