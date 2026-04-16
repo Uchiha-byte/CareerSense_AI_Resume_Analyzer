@@ -172,11 +172,62 @@ const Icon = ({ children, className = "w-5 h-5", ...props }: any) => (
 
 const BrandLogo = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.2"/>
-        <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 12L15 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"/>
-        <path d="M12 12L9 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.4"/>
-        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+        <defs>
+            <linearGradient id="brand-logo-gradient" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#A5F3FC" />
+                <stop offset="0.45" stopColor="#60A5FA" />
+                <stop offset="1" stopColor="#1D4ED8" />
+            </linearGradient>
+            <linearGradient id="brand-logo-dark-gradient" x1="6" y1="6" x2="18" y2="18" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#0F172A" />
+                <stop offset="1" stopColor="#1E3A8A" />
+            </linearGradient>
+        </defs>
+        <path
+            d="M12 2.75L19 5.55V11.4C19 16.18 16.21 20.37 12 22C7.79 20.37 5 16.18 5 11.4V5.55L12 2.75Z"
+            fill="url(#brand-logo-gradient)"
+            opacity="0.22"
+        />
+        <path
+            d="M12 2.75L19 5.55V11.4C19 16.18 16.21 20.37 12 22C7.79 20.37 5 16.18 5 11.4V5.55L12 2.75Z"
+            stroke="url(#brand-logo-gradient)"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M7.8 16.8C9.45 15.4 10.85 14.18 11.85 13.18C13.18 11.85 14.18 10.63 15.88 8.72"
+            stroke="url(#brand-logo-gradient)"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M13.95 8.7H15.88V10.62"
+            stroke="url(#brand-logo-gradient)"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M8.15 15.95H9.7V17.5H8.15V15.95Z"
+            fill="url(#brand-logo-dark-gradient)"
+            stroke="url(#brand-logo-gradient)"
+            strokeWidth="0.95"
+        />
+        <path
+            d="M10.28 13.92H11.98V15.62H10.28V13.92Z"
+            fill="url(#brand-logo-dark-gradient)"
+            stroke="url(#brand-logo-gradient)"
+            strokeWidth="0.95"
+        />
+        <path
+            d="M12.62 11.52H14.52V13.42H12.62V11.52Z"
+            fill="url(#brand-logo-dark-gradient)"
+            stroke="url(#brand-logo-gradient)"
+            strokeWidth="0.95"
+        />
+        <circle cx="16.9" cy="7.15" r="1.2" fill="#DBEAFE" opacity="0.95" />
     </svg>
 );
 
@@ -1554,10 +1605,25 @@ function App() {
         // Inject brand favicon
         const svg = `
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="#6366f1" stroke-width="2" opacity="0.2"/>
-                <circle cx="12" cy="12" r="5" stroke="#6366f1" stroke-width="2"/>
-                <path d="M12 12L15 9" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="12" cy="12" r="1.5" fill="#6366f1" />
+                <defs>
+                    <linearGradient id="favicon-gradient" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#A5F3FC"/>
+                        <stop offset="0.45" stop-color="#60A5FA"/>
+                        <stop offset="1" stop-color="#1D4ED8"/>
+                    </linearGradient>
+                    <linearGradient id="favicon-dark-gradient" x1="6" y1="6" x2="18" y2="18" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#0F172A"/>
+                        <stop offset="1" stop-color="#1E3A8A"/>
+                    </linearGradient>
+                </defs>
+                <path d="M12 2.75L19 5.55V11.4C19 16.18 16.21 20.37 12 22C7.79 20.37 5 16.18 5 11.4V5.55L12 2.75Z" fill="url(#favicon-gradient)" opacity="0.22"/>
+                <path d="M12 2.75L19 5.55V11.4C19 16.18 16.21 20.37 12 22C7.79 20.37 5 16.18 5 11.4V5.55L12 2.75Z" stroke="url(#favicon-gradient)" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M7.8 16.8C9.45 15.4 10.85 14.18 11.85 13.18C13.18 11.85 14.18 10.63 15.88 8.72" stroke="url(#favicon-gradient)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13.95 8.7H15.88V10.62" stroke="url(#favicon-gradient)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.15 15.95H9.7V17.5H8.15V15.95Z" fill="url(#favicon-dark-gradient)" stroke="url(#favicon-gradient)" stroke-width="0.95"/>
+                <path d="M10.28 13.92H11.98V15.62H10.28V13.92Z" fill="url(#favicon-dark-gradient)" stroke="url(#favicon-gradient)" stroke-width="0.95"/>
+                <path d="M12.62 11.52H14.52V13.42H12.62V11.52Z" fill="url(#favicon-dark-gradient)" stroke="url(#favicon-gradient)" stroke-width="0.95"/>
+                <circle cx="16.9" cy="7.15" r="1.2" fill="#DBEAFE" opacity="0.95"/>
             </svg>
         `;
         const blob = new Blob([svg], { type: 'image/svg+xml' });
@@ -1594,8 +1660,8 @@ function App() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
                         <div className="flex items-center gap-4 group cursor-pointer" onClick={() => setCurrentView('submit')}>
-                            <div className="flex items-center justify-center w-11 h-11 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl shadow-[0_0_20px_rgba(79,70,229,0.3)] group-hover:scale-110 transition-transform">
-                                <div className="text-white scale-110"><BrandLogo className="w-5 h-5" /></div>
+                            <div className="flex items-center justify-center w-11 h-11 rounded-2xl border border-white/15 bg-gradient-to-br from-sky-400/35 via-blue-500/30 to-blue-950/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_0_24px_rgba(37,99,235,0.28)] backdrop-blur-xl group-hover:scale-110 transition-transform">
+                                <div className="scale-110"><BrandLogo className="w-5 h-5" /></div>
                             </div>
                             <h1 className="text-2xl font-black tracking-tighter">
                                 <span className="text-white">Career</span><span className="text-indigo-400">Sense</span>
