@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, Component } from "reac
 import { Circle } from "lucide-react";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { HeroGeometric } from "@/components/ui/shape-landing-hero";
+import { FaGithub } from "react-icons/fa";
 
 // ==========================================
 // ERROR BOUNDARY — wraps any crashy component
@@ -510,6 +511,15 @@ function SubmitView({ onSessionCreated, onViewHistory }: any) {
     const bar = useLoadingBar();
     const statusTimers = useRef<any[]>([]);
 
+    const DeepAnalysisLoader = () => (
+        <span className="relative inline-flex h-6 w-6 items-center justify-center will-change-transform">
+            <span className="absolute h-6 w-6 rounded-full border border-cyan-300/35 animate-[spin_1.1s_linear_infinite]" />
+            <span className="absolute h-4 w-4 rounded-full border border-indigo-300/45 animate-[spin_1.8s_linear_infinite_reverse]" />
+            <span className="absolute h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.8)] animate-pulse" />
+            <span className="absolute left-[2px] top-1/2 -translate-y-1/2 h-1 w-1 rounded-full bg-violet-300 animate-[spin_1.1s_linear_infinite] origin-[10px_50%]" />
+        </span>
+    );
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
@@ -819,14 +829,21 @@ function SubmitView({ onSessionCreated, onViewHistory }: any) {
                                     type="submit"
                                     disabled={loading}
                                     className={`w-full py-4 px-8 rounded-xl font-bold text-white text-base transition-all duration-300 active:scale-[0.98] ${loading
-                                        ? 'bg-indigo-600/50 cursor-not-allowed'
+                                        ? 'cursor-not-allowed bg-gradient-to-r from-indigo-600/70 via-blue-600/70 to-cyan-600/70 shadow-[0_0_35px_rgba(59,130,246,0.35)]'
                                         : 'bg-indigo-600 hover:bg-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]'
                                         }`}
                                 >
                                     {loading ? (
                                         <span className="flex items-center justify-center gap-3">
-                                            <Icons.Spinner className="w-5 h-5" />
-                                            {statusMsg}
+                                            <DeepAnalysisLoader />
+                                            <span className="inline-flex items-center gap-2">
+                                                <span className="tracking-wide">{statusMsg}</span>
+                                                <span className="inline-flex gap-1">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-200/80 animate-bounce [animation-delay:-0.3s]" />
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-200/80 animate-bounce [animation-delay:-0.15s]" />
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-200/80 animate-bounce" />
+                                                </span>
+                                            </span>
                                         </span>
                                     ) : (
                                         <span className="flex items-center justify-center gap-3">
@@ -836,11 +853,29 @@ function SubmitView({ onSessionCreated, onViewHistory }: any) {
                                     )}
                                 </button>
                             </form>
-                        </div>
-
-                        <p className="text-center text-[10px] uppercase tracking-[0.2em] text-white/20 mt-8 font-black">
+                            <p className="text-center text-[10px] uppercase tracking-[0.2em] text-white/20 mt-8 font-white">
                             Security Protocol Active — Privacy Guaranteed
                         </p>
+                        </div>
+                        <p className="text-center text-[10px] uppercase tracking-[0.2em] text-white/20 mt-8 font-black">
+  Made By: Team HireSense
+</p>
+
+<p className="text-center text-[10px] uppercase tracking-[0.2em] mt-1 font-black">
+  Developed By:{" "}
+  <a
+    href="https://github.com/Uchiha-Byte"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-purple-400 hover:text-purple-300 inline-flex items-center gap-1 transition"
+  >
+    <Icons.Github className="text-[12px]" />
+    Uchiha-Byte
+  </a>
+</p>
+
+
+
 
                     </div>
                 </div>
