@@ -35,8 +35,8 @@ const MODEL_POOL: ModelConfig[] = [
   { id: 'gemma-3-27b-it',    provider: 'gemini', modelName: 'gemma-3-27b-it',   apiKeyEnv: 'GEMINI_API_KEY', maxConcurrent: resolveMaxConcurrent(10), priority: 2 },
 
   // Tier 4: OpenAI paid fallback (Priority 3)
-  { id: 'openai-gpt4o-mini', provider: 'openai', modelName: 'gpt-4o-mini', apiKeyEnv: 'OPENAI_API_KEY', maxConcurrent: resolveMaxConcurrent(10), priority: 3 },
-  { id: 'openai-gpt4o',      provider: 'openai', modelName: 'gpt-4o',      apiKeyEnv: 'OPENAI_API_KEY', maxConcurrent: resolveMaxConcurrent(10), priority: 3 },
+  //{ id: 'openai-gpt4o-mini', provider: 'openai', modelName: 'gpt-4o-mini', apiKeyEnv: 'OPENAI_API_KEY', maxConcurrent: resolveMaxConcurrent(10), priority: 3 },
+  //{ id: 'openai-gpt4o',      provider: 'openai', modelName: 'gpt-4o',      apiKeyEnv: 'OPENAI_API_KEY', maxConcurrent: resolveMaxConcurrent(10), priority: 3 },
 ];
 
 interface ModelState {
@@ -62,6 +62,38 @@ export class LLMRouter {
     const allEligible = Array.from(this.pool.values()).filter(
       (m) => m.available && m.activeSessions < m.config.maxConcurrent
     );
+    return this.selectModelFromEligible(allEligible);
+  }
+
+  selectModelByProviders(preferredProviders: ModelConfig['provider'][]): ModelConfig {
+    return this.selectModelByProvidersExcluding(preferredProviders, []);
+  }
+
+  selectModelByProvidersExcluding(
+    preferredProviders: ModelConfig['provider'][],
+    excludedModelIds: string[],
+  ): ModelConfig {
+    const excluded = new Set(excludedModelIds);
+    const providerEligible = Array.from(this.pool.values()).filter(
+      (m) =>
+        m.available &&
+        m.activeSessions < m.config.maxConcurrent &&
+        preferredProviders.includes(m.config.provider) &&
+        !excluded.has(m.config.id)
+    );
+    if (providerEligible.length > 0) {
+      return this.selectModelFromEligible(providerEligible);
+    }
+    const fallbackEligible = Array.from(this.pool.values()).filter(
+      (m) =>
+        m.available &&
+        m.activeSessions < m.config.maxConcurrent &&
+        !excluded.has(m.config.id)
+    );
+    return this.selectModelFromEligible(fallbackEligible);
+  }
+
+  private selectModelFromEligible(allEligible: ModelState[]): ModelConfig {
 
     if (allEligible.length === 0) {
       throw new CapacityExceededError();
@@ -119,6 +151,10 @@ export class LLMRouter {
       maxConcurrent: m.config.maxConcurrent,
       available: m.available,
     }));
+  }
+
+  getModelIds(): string[] {
+    return Array.from(this.pool.values()).map((m) => m.config.id);
   }
 }
 

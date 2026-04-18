@@ -3,6 +3,7 @@ import type { AnalysisSession, AnalysisResult } from '../types';
 
 interface CreateSessionData {
   id: string;
+  inputHash?: string | null;
   resume: string;
   targetRole: string;
   targetCompanies: string[] | null;
@@ -14,10 +15,11 @@ export function createSession(data: CreateSessionData): AnalysisSession {
   const expiresAt = createdAt + 604800;
 
   db.prepare(`
-    INSERT INTO analysis_sessions (id, resume, target_role, target_companies, status, result, error, created_at, expires_at)
-    VALUES (?, ?, ?, ?, 'pending', NULL, NULL, ?, ?)
+    INSERT INTO analysis_sessions (id, input_hash, resume, target_role, target_companies, status, result, error, created_at, expires_at)
+    VALUES (?, ?, ?, ?, ?, 'pending', NULL, NULL, ?, ?)
   `).run(
     data.id,
+    data.inputHash ?? null,
     data.resume,
     data.targetRole,
     data.targetCompanies !== null ? JSON.stringify(data.targetCompanies) : null,
@@ -58,6 +60,7 @@ export function updateSession(
 
 interface SessionRow {
   id: string;
+  input_hash?: string | null;
   resume: string;
   target_role: string;
   target_companies: string | null;
@@ -66,6 +69,34 @@ interface SessionRow {
   error: string | null;
   created_at: number;
   expires_at: number;
+}
+
+export function findReusableCompletedSessionByInputHash(inputHash: string): AnalysisSession | null {
+  const db = getDb();
+  const now = Math.floor(Date.now() / 1000);
+  const row = db.prepare(`
+    SELECT * FROM analysis_sessions
+    WHERE input_hash = ?
+      AND status = 'complete'
+      AND result IS NOT NULL
+      AND expires_at > ?
+    ORDER BY created_at DESC
+    LIMIT 1
+  `).get(inputHash, now) as SessionRow | undefined;
+
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    resume: row.resume,
+    targetRole: row.target_role,
+    targetCompanies: row.target_companies !== null ? JSON.parse(row.target_companies) as string[] : null,
+    status: row.status,
+    result: row.result !== null ? JSON.parse(row.result) as AnalysisResult : null,
+    error: row.error,
+    createdAt: row.created_at,
+    expiresAt: row.expires_at,
+  };
 }
 
 export function getSessionById(id: string): AnalysisSession | null {
